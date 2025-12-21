@@ -58,7 +58,6 @@ vim.pack.add({
 	{ src = "https://github.com/lewis6991/gitsigns.nvim" },
 	{ src = "https://github.com/chentoast/marks.nvim" },
 	{ src = "https://github.com/folke/zen-mode.nvim" },
-	{ src = "https://github.com/ellisonleao/gruvbox.nvim" },
 })
 
 require("zen-mode").setup({
@@ -71,6 +70,12 @@ require("marks").setup({
 	builtin_marks = { "<", ">", "^" },
 })
 
+local function lsp_color_off()
+	for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
+		vim.api.nvim_set_hl(0, group, {})
+	end
+end
+
 local function color_my_pencils(color)
 	vim.cmd.colorscheme(color)
 
@@ -78,6 +83,7 @@ local function color_my_pencils(color)
 	vim.cmd([[highlight! link TelescopeNormal   Normal]])
 	vim.cmd([[highlight! link TelescopeBorder   FloatBorder]])
 
+	lsp_color_off()
 	vim.g.syntax_on = true
 end
 
@@ -117,16 +123,6 @@ require("telescope").setup({
 		color_devicons = false,
 		sorting_strategy = "ascending",
 		borderchars = { "", "", "", "", "", "", "", "" },
-		-- borderchars = {
-		-- 	"─", -- top
-		-- 	"│", -- right
-		-- 	"─", -- bottom
-		-- 	"│", -- left
-		-- 	"┌", -- top-left
-		-- 	"┐", -- top-right
-		-- 	"┘", -- bottom-right
-		-- 	"└", -- bottom-left
-		-- },
 		path_displays = "smart",
 		layout_strategy = "horizontal",
 		layout_config = {
@@ -223,12 +219,6 @@ local function pack_clean()
 	local choice = vim.fn.confirm("Remove unused plugins?", "&Yes\n&No", 2)
 	if choice == 1 then
 		vim.pack.del(unused_plugins)
-	end
-end
-
-local function lsp_color_off()
-	for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
-		vim.api.nvim_set_hl(0, group, {})
 	end
 end
 
