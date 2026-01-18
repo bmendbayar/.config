@@ -5,12 +5,12 @@ ZSH_THEME="robbyrussell"
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-alias vi="NVIM_APPNAME=vir ~/nightly-nvim/nvim-macos-arm64/bin/nvim"
 alias v="NVIM_APPNAME=nvim ~/nightly-nvim/nvim-macos-arm64/bin/nvim"
-alias g++="g++ -std=c++20"
+alias vi="NVIM_APPNAME=nvim ~/nightly-nvim/nvim-macos-arm64/bin/nvim"
 alias gs="git status"
-# export MANPATH=/usr/local/man:/usr/local/share/man:/usr/share/man:/usr/man
-alias m="open -a marta ."
+alias gd="git diff"
+alias m="open -a finder ."
+alias l="ls -lah"
 
 man() {
   v -c "tab Man $*" -c "tabo"
