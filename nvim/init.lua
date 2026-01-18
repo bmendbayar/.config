@@ -8,6 +8,7 @@ opt.signcolumn = "yes"
 opt.colorcolumn = "80"
 opt.termguicolors = true
 opt.ignorecase = true
+opt.hls = false
 
 opt.autoindent = true
 opt.smartindent = true
@@ -38,7 +39,8 @@ opt.foldopen = ""
 opt.foldlevelstart = 99
 
 opt.list = true
-opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+-- opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+opt.listchars = { space = "·", tab = "» ", trail = "·", nbsp = "␣" }
 
 opt.laststatus = 2
 
@@ -47,7 +49,6 @@ vim.g.netrw_sort_by = "size"
 
 vim.pack.add({
 	{ src = "https://github.com/blazkowolf/gruber-darker.nvim" },
-	{ src = "https://github.com/vague-theme/vague.nvim" },
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = "https://github.com/mason-org/mason.nvim" },
 	{ src = "https://github.com/Saghen/blink.cmp" },
@@ -79,19 +80,14 @@ end
 local function color_my_pencils(color)
 	vim.cmd.colorscheme(color)
 
-	vim.api.nvim_set_hl(0, "Folded", { fg = "#6e6a86", bg = "none", bold = true })
+	vim.api.nvim_set_hl(0, "Folded", { fg = "#505050", bg = "none", bold = true })
+	vim.api.nvim_set_hl(0, "Whitespace", { fg = "#353535", bg = "none" })
 	vim.cmd([[highlight! link TelescopeNormal   Normal]])
 	vim.cmd([[highlight! link TelescopeBorder   FloatBorder]])
 
 	lsp_color_off()
 	vim.g.syntax_on = true
 end
-
-require("vague").setup({
-	bold = true,
-	italic = false,
-	transparent = true,
-})
 
 require("gruber-darker").setup({
 	italic = {
@@ -102,7 +98,6 @@ require("gruber-darker").setup({
 	},
 })
 
--- MY_COLOR = "vague"
 MY_COLOR = "gruber-darker"
 color_my_pencils(MY_COLOR)
 
@@ -172,6 +167,15 @@ require("gitsigns").setup({
 	},
 })
 
+vim.filetype.add({
+	extension = {
+		CPP = "cpp",
+		HPP = "cpp",
+		C = "c",
+		H = "cpp",
+	},
+})
+
 vim.lsp.enable({
 	"lua_ls",
 	"clangd",
@@ -228,7 +232,7 @@ vim.g.mapleader = " "
 -- stylua: ignore start
 map("n", "<Leader>ex", "<cmd>Ex %:p:h<CR>")
 map("n", "<leader>pc", pack_clean)
-map("n", "<leader>lco", lsp_color_off)
+map("n", "<leader>co", lsp_color_off)
 map("n", "<leader>ps", "<cmd>lua vim.pack.update()<CR>")
 map("n", "<leader>cf", function() require("conform").format({ lsp_format = false }) end)
 map("n", "<leader>w", "<Cmd>:update<CR>")
@@ -240,6 +244,7 @@ map("n", "<leader>zz", function() require("zen-mode").toggle() end)
 
 -- harpoon replacement
 map("n", "<leader>a", function() vim.cmd("argadd %") vim.cmd("argdedup") end)
+map("n", "<leader>d", function() vim.cmd("argd %") end)
 map("n", "<leader>l", function() vim.cmd.args() end)
 map("n", "<C-h>", function() vim.cmd("silent! 1argument") end)
 map("n", "<C-j>", function() vim.cmd("silent! 2argument") end)

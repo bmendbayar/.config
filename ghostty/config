@@ -1,4 +1,4 @@
-title = "boo"
+# title = "boooo 👻"
 theme = Gruber Darker
 shell-integration-features = no-cursor
 background = #181818
@@ -26,4 +26,9 @@ palette = 13=#afafda
 palette = 14=#90aa9e
 palette = 15=#f5f5f5
 font-family = Iosevka Term
-font-size = 24
+# font-family = Cascadia Mono
+font-feature = -calt
+font-feature = -liga
+font-feature = -dlig
+font-size = 25
+window-decoration = none
