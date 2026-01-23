@@ -1,0 +1,60 @@
+[window]
+decorations = "None"
+padding = { x = 5, y = 5 }
+
+[font]
+size = 25.0
+
+offset = { x = 0, y = 0 } 
+glyph_offset = { x = 0, y = 0 }
+
+[font.normal]
+family = "Iosevka Term"
+style = "Light"
+
+[font.bold]
+family = "Iosevka Term"
+style = "Medium"
+
+[font.italic]
+family = "Iosevka Term"
+style = "Light Italic"
+
+[font.bold_italic]
+family = "Iosevka Term"
+style = "Medium Italic"
+
+[cursor]
+style = { shape = "Block", blinking = "Off" }
+
+[colors.primary]
+background = "#181818"
+foreground = "#e4e4e4"
+
+[colors.cursor]
+text = "#000000"
+cursor = "#ffdd33"
+
+[colors.selection]
+text = "#f4f4ff"
+background = "#453d41"
+
+[colors.normal]
+black   = "#181818" # palette = 0
+red     = "#ff0a36" # palette = 1
+green   = "#42dc00" # palette = 2
+yellow  = "#ffdb00" # palette = 3
+blue    = "#90aa9e" # palette = 4
+magenta = "#a095cb" # palette = 5
+cyan    = "#92a7cb" # palette = 6
+white   = "#e4e4e4" # palette = 7
+
+[colors.bright]
+black   = "#54494e" # palette = 8
+red     = "#ff3851" # palette = 9
+green   = "#42dc00" # palette = 10
+yellow  = "#ffdb00" # palette = 11
+blue    = "#90aa9e" # palette = 12
+magenta = "#afafda" # palette = 13
+cyan    = "#92a7cb" # palette = 14
+white   = "#f5f5f5" # palette = 15
