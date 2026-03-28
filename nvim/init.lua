@@ -2,10 +2,10 @@ local opt = vim.opt
 
 vim.cmd([[set statusline=%<%f\ %h%m%r%=%-13a%-13.(%l,%c%V%)\ %P]])
 
--- opt.gcr = "n-v-c-sm:block,i-ci-ve:ver25,t:block-TermCursor"
+opt.tags = { "./tags", "tags;", "./.tags", vim.fn.expand("~/.systags"), ".tags;" }
 opt.guicursor = ""
 opt.signcolumn = "yes"
-opt.colorcolumn = "80"
+-- opt.colorcolumn = "80"
 opt.termguicolors = true
 opt.ignorecase = true
 opt.hls = false
@@ -39,7 +39,6 @@ opt.foldopen = ""
 opt.foldlevelstart = 99
 
 opt.list = true
--- opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 opt.listchars = { space = "·", tab = "» ", trail = "·", nbsp = "␣" }
 
 opt.laststatus = 2
@@ -50,6 +49,7 @@ vim.g.netrw_sort_by = "size"
 vim.pack.add({
 	{ src = "https://github.com/blazkowolf/gruber-darker.nvim" },
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
+	{ src = "https://github.com/mrcjkb/rustaceanvim" },
 	{ src = "https://github.com/mason-org/mason.nvim" },
 	{ src = "https://github.com/Saghen/blink.cmp" },
 	{ src = "https://github.com/nvim-telescope/telescope.nvim" },
@@ -58,34 +58,22 @@ vim.pack.add({
 	{ src = "https://github.com/stevearc/conform.nvim" },
 	{ src = "https://github.com/lewis6991/gitsigns.nvim" },
 	{ src = "https://github.com/chentoast/marks.nvim" },
-	{ src = "https://github.com/folke/zen-mode.nvim" },
-})
-
-require("zen-mode").setup({
-	window = {
-		width = 100,
-	},
 })
 
 require("marks").setup({
 	builtin_marks = { "<", ">", "^" },
 })
 
-local function lsp_color_off()
-	for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
-		vim.api.nvim_set_hl(0, group, {})
-	end
-end
-
 local function color_my_pencils(color)
 	vim.cmd.colorscheme(color)
 
 	vim.api.nvim_set_hl(0, "Folded", { fg = "#505050", bg = "none", bold = true })
 	vim.api.nvim_set_hl(0, "Whitespace", { fg = "#353535", bg = "none" })
+	vim.api.nvim_set_hl(0, "Number", { link = "Normal" })
+	vim.api.nvim_set_hl(0, "Float", { link = "Normal" })
 	vim.cmd([[highlight! link TelescopeNormal   Normal]])
 	vim.cmd([[highlight! link TelescopeBorder   FloatBorder]])
 
-	lsp_color_off()
 	vim.g.syntax_on = true
 end
 
@@ -147,6 +135,7 @@ require("conform").setup({
 		cpp = { "clang_format" },
 		c = { "clang_format" },
 		sh = { "shfmt" },
+		rs = { "cargo-fmt" },
 	},
 
 	formatters = {
@@ -233,15 +222,13 @@ vim.g.mapleader = " "
 -- stylua: ignore start
 map("n", "<Leader>ex", "<cmd>Ex %:p:h<CR>")
 map("n", "<leader>pc", pack_clean)
-map("n", "<leader>co", lsp_color_off)
 map("n", "<leader>ps", "<cmd>lua vim.pack.update()<CR>")
 map("n", "<leader>cf", function() require("conform").format({ lsp_format = false }) end)
-map("n", "<leader>w", "<Cmd>:update<CR>")
-map("n", "<leader>q", "<Cmd>:quit<CR>")
-map("n", "<leader>Q", "<Cmd>:wqa<CR>")
+map("n", "<leader>w", "<cmd>:update<CR>")
+map("n", "<leader>q", "<cmd>:quit<CR>")
+map("n", "<leader>Q", "<cmd>:wqa<CR>")
 map({ "n", "v", "x" }, ";", ":")
 map({ "n", "v", "x" }, ":", ";")
-map("n", "<leader>zz", function() require("zen-mode").toggle() end)
 
 -- harpoon replacement
 map("n", "<leader>a", function() vim.cmd("argadd %") vim.cmd("argdedup") end)
@@ -265,6 +252,17 @@ map("n", "<leader>fm", builtin.man_pages)
 map("n", "<leader>fr", builtin.lsp_references)
 map("n", "<leader><leader>", builtin.buffers)
 map("n", "<leader>fc", function() builtin.find_files({ cwd = vim.fn.stdpath("config") }) end)
+map("n", "gd", "<C-]>", opts)
+map("n", "gD", function() vim.lsp.buf.declaration() end, opts)
+map("n", "<leader>gi", function() vim.lsp.buf.implementation() end, opts)
+map("n", "gr", vim.lsp.buf.references, opts)
+-- map("n", "gl", function() vim.diagnostic.open_float({ border = "single" }) end, opts)
+-- map("n", "K", function() vim.lsp.buf.hover({ border = "single" }) end, opts)
+-- map("n", "<leader>sw", function() vim.lsp.buf.workspace_symbol() end, opts)
+-- map("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
+-- map("n", "<leader>cr", function() vim.lsp.buf.rename() end, opts)
+vim.cmd([[nnoremap g= g+| " g=g=g= is less awkward than g+g+g+]])
+-- stylua: ignore end
 
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "yanking highlight",
@@ -274,26 +272,31 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
-vim.cmd([[nnoremap g= g+| " g=g=g= is less awkward than g+g+g+]])
-
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("my.lsp", {}),
 	callback = function(e)
-		-- local client = vim.lsp.get_client_by_id(e.data.client_id)
-		-- if client and client.server_capabilities.semanticTokensProvider then
-		-- 	client.server_capabilities.semanticTokensProvider = nil
-		-- end
-    lsp_color_off()
+		local client = vim.lsp.get_client_by_id(e.data.client_id)
+		if not client then
+			return
+		end
+
+		client.server_capabilities.semanticTokensProvider = nil
+
+		local caps_to_disable = {
+			"documentFormattingProvider",
+			"documentRangeFormattingProvider",
+			"hoverProvider",
+			"renameProvider",
+			"completionProvider",
+			"codeActionProvider",
+			"diagnosticProvider",
+		}
+
+		for _, cap in ipairs(caps_to_disable) do
+			client.server_capabilities[cap] = false
+		end
 
 		local opts = { buffer = e.buf }
-		map("n", "gd", function() vim.lsp.buf.definition() end, opts)
-		map("n", "gD", function() vim.lsp.buf.declaration() end, opts)
-		map("n", "gl", function() vim.diagnostic.open_float({ border = "single" }) end, opts)
-		map("n", "K", function() vim.lsp.buf.hover({ border = "single" }) end, opts)
-		map("n", "<leader>gi", function() vim.lsp.buf.implementation() end, opts)
-		map("n", "<leader>sw", function() vim.lsp.buf.workspace_symbol() end, opts)
-		map("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
-		map("n", "<leader>cr", function() vim.lsp.buf.rename() end, opts)
+		vim.diagnostic.enable(false, { bufnr = e.buf })
 	end,
 })
--- stylua: ignore end
