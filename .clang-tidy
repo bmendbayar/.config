@@ -1,0 +1,23 @@
+---
+Checks: >
+  -*,
+  bugprone-*,
+  modernize-*,
+  readability-*,
+  performance-*,
+  cppcoreguidelines-*,
+  -readability-braces-around-statements,
+  -readability-magic-numbers
+
+WarningsAsErrors: 'bugprone-*,performance-*'
+
+CheckOptions:
+  - key:             readability-identifier-naming.VariableCase
+    value:           snake_case
+  - key:             readability-identifier-naming.FunctionCase
+    value:           snake_case
+  - key:             readability-identifier-naming.ClassCase
+    value:           CamelCase
+  - key:             modernize-use-auto.MinTypeNameLength
+    value:           5
+---

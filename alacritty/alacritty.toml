@@ -13,47 +13,47 @@ key = "Key0"
 mods = "Command"
 
 [font.normal]
-family = "Iosevka Custom"
-style = "SemiLight"
-
-# family = "Comic Code"
-# style = "Regular"
-
-# family = "FiraCode Nerd Font Mono"
-# style = "Regular"
-
-# family = "Cascadia Code"
+# family = "Iosevka Custom"
 # style = "SemiLight"
 
-[font.bold]
-family = "Iosevka Custom"
-style = "Medium"
-
 # family = "Comic Code"
-# style = "Medium"
-
-# family = "FiraCode Nerd Font Mono"
-# style = "Medium"
-
-# family = "Cascadia Code"
 # style = "Regular"
 
-[font.italic]
-family = "Iosevka Custom"
-style = "SemiLight Italic"
+# family = "FiraCode Nerd Font Mono"
+# style = "Regular"
+
+family = "Cascadia Code"
+style = "SemiLight"
+
+[font.bold]
+# family = "Iosevka Custom"
+# style = "Medium"
 
 # family = "Comic Code"
-# style = "Regular Italic"
+# style = "Medium"
 
 # family = "FiraCode Nerd Font Mono"
-# style = "Regular Italic"
+# style = "Medium"
 
-# family = "Cascadia Code"
+family = "Cascadia Code"
+style = "Regular"
+
+[font.italic]
+# family = "Iosevka Custom"
 # style = "SemiLight Italic"
 
+# family = "Comic Code"
+# style = "Regular Italic"
+
+# family = "FiraCode Nerd Font Mono"
+# style = "Regular Italic"
+
+family = "Cascadia Code"
+style = "SemiLight Italic"
+
 [font.bold_italic]
-family = "Iosevka Custom"
-style = "Medium Italic"
+# family = "Iosevka Custom"
+# style = "Medium Italic"
 
 # family = "Comic Code"
 # style = "Medium Italic"
@@ -61,8 +61,8 @@ style = "Medium Italic"
 # family = "FiraCode Nerd Font Mono"
 # style = "Medium Italic"
 
-# family = "Cascadia Code"
-# style = "Regular Italic"
+family = "Cascadia Code"
+style = "Regular Italic"
 
 [cursor]
 style = { shape = "Block", blinking = "Off" }

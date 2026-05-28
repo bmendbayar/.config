@@ -219,7 +219,15 @@ if.app-id = 'com.apple.Preview'
 run = "move-node-to-workspace P"
 
 [[on-window-detected]]
+if.app-id = 'com.pwmt.zathura'
+run = 'move-node-to-workspace P'
+
+[[on-window-detected]]
 if.app-id = 'org.alacritty'
+run = "move-node-to-workspace T"
+
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
 run = "move-node-to-workspace T"
 
 [[on-window-detected]]
@@ -241,11 +249,3 @@ run = "move-node-to-workspace F"
 [[on-window-detected]]
 if.app-id = 'ch.protonvpn.mac'
 run = "move-node-to-workspace V"
-
-[[on-window-detected]]
-if.app-id = 'com.apple.iBooksX'
-run = "move-node-to-workspace N"
-
-[[on-window-detected]]
-if.app-id = 'com.utmapp.UTM'
-run = "move-node-to-workspace U"
