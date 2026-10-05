@@ -1,0 +1,153 @@
+#!/usr/bin/env bash
+
+set -e
+
+LANG="go"
+PROBLEM_NAME=""
+
+usage() {
+    echo "Usage: $(basename "$0") [-c|--cpp] <problem_name>"
+    echo "Options:"
+    echo "  -c, --cpp    Generate C++ (CMake + GTest) scaffold instead of the default Go scaffold"
+    exit 1
+}
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -c|--cpp)
+            LANG="cpp"
+            shift
+            ;;
+        -h|--help)
+            usage
+            ;;
+        -*)
+            echo "wrong option $1" >&2
+            usage
+            ;;
+        *)
+            if [ -z "$PROBLEM_NAME" ]; then
+                PROBLEM_NAME="$1"
+            else
+                echo "no multiple names" >&2
+                usage
+            fi
+            shift
+            ;;
+    esac
+done
+
+if [ -z "$PROBLEM_NAME" ]; then
+    usage
+fi
+
+mkdir -p "$PROBLEM_NAME"
+cd "$PROBLEM_NAME"
+
+if [ "$LANG" = "go" ]; then
+    go mod init "$PROBLEM_NAME" >/dev/null 2>&1
+
+    cat << 'EOF' > solution.go
+package main
+
+func Solve(input any) any {
+	_ = input
+	return nil
+}
+EOF
+
+    cat << 'EOF' > solution_test.go
+package main
+
+import (
+	"reflect"
+	"testing"
+)
+
+func TestSolution(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    any
+		expected any
+	}{
+		{
+			name:     "initial sample case",
+			input:    nil,
+			expected: nil,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			retVal := Solve(tt.input)
+			if !reflect.DeepEqual(retVal, tt.expected) {
+				t.Errorf("Solve() = %v, want %v", retVal, tt.expected)
+			}
+		})
+	}
+}
+EOF
+
+    go test ./...
+    echo "successfully created(golang): $PROBLEM_NAME"
+
+else
+    cat << EOF > CMakeLists.txt
+cmake_minimum_required(VERSION 3.14)
+project($PROBLEM_NAME)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/refs/tags/release-1.12.1.zip
+  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+FetchContent_MakeAvailable(googletest)
+
+add_executable(test test.cpp)
+target_link_libraries(test GTest::gtest_main)
+EOF
+
+    cat << 'EOF' > solution.h
+#pragma once
+
+#include <algorithm>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+class Solution
+{
+public:
+    void foo(void *arg)
+    {
+    }
+};
+EOF
+
+    cat << 'EOF' > test.cpp
+#include <gtest/gtest.h>
+#include "solution.h"
+
+class SolutionTest : public ::testing::Test
+{
+protected:
+    Solution sol;
+
+    void SetUp() override
+    {
+    }
+};
+
+TEST_F(SolutionTest, TestName)
+{
+    EXPECT_EQ(false, 0);
+}
+EOF
+
+    mkdir -p build && cd build && cmake .. && cd ..
+    echo "successfully created(cpp): $PROBLEM_NAME"
+fi

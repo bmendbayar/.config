@@ -1,0 +1,17 @@
+set selection-clipboard clipboard
+set adjust-open "best-fit"
+set pages-per-row 1
+set scroll-page-aware "true"
+set smooth-scroll "false"
+
+set page-cache-size 15
+set render-loading "false"
+
+set statusbar-h-padding 0
+set statusbar-v-padding 0
+set font "monospace 10"
+
+set recolor "false"
+set recolor-keephue "true"
+set recolor-lightcolor "#1e1e2e"
+set recolor-darkcolor "#cdd6f4"
